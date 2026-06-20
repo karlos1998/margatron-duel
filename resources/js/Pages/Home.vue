@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useAppVersion } from '@/Composables/useAppVersion';
 import { Head, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
@@ -6,6 +7,7 @@ const alertMessage = ref('');
 const showRecovery = ref(false);
 const remail = ref('');
 const online = ref(0);
+const appVersion = useAppVersion();
 
 const registerForm = useForm({
     nick: '',
@@ -73,7 +75,7 @@ function recoverPassword(): void {
 
     <div id="centerbox">
         <header id="logo">
-            <div id="ver">v. 0.1</div>
+            <div id="ver">v. {{ appVersion }}</div>
         </header>
 
         <div v-if="alertMessage" id="alert" @click="alertMessage = ''">

@@ -44,6 +44,7 @@ APP_URL=http://localhost:8123
 APP_PORT=8123
 VITE_PORT=5173
 APP_FORCE_HTTPS=false
+APP_VERSION=0.1.0
 
 DB_CONNECTION=mysql
 DB_HOST=mysql
@@ -164,6 +165,7 @@ Na produkcji za Cloudflare ustaw:
 APP_ENV=production
 APP_DEBUG=false
 APP_FORCE_HTTPS=true
+APP_VERSION=0.1.0
 APP_URL=https://twoja-domena.pl
 VIRTUAL_HOST=twoja-domena.pl
 ```

@@ -56,6 +56,25 @@ return [
 
     'force_https' => (bool) env('APP_FORCE_HTTPS', false),
 
+    'version' => env('APP_VERSION') ?: (function (): string {
+        $packagePath = base_path('package.json');
+
+        if (! is_file($packagePath)) {
+            return '0.1.0';
+        }
+
+        $packageContents = file_get_contents($packagePath);
+
+        if ($packageContents === false) {
+            return '0.1.0';
+        }
+
+        $package = json_decode($packageContents, true);
+        $version = is_array($package) ? ($package['version'] ?? null) : null;
+
+        return is_string($version) && $version !== '' ? $version : '0.1.0';
+    })(),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

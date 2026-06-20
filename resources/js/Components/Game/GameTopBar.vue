@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useAppVersion } from '@/Composables/useAppVersion';
 import { router } from '@inertiajs/vue3';
 
 const props = withDefaults(defineProps<{
@@ -11,6 +12,8 @@ const emit = defineEmits<{
     settings: [];
     navigating: [];
 }>();
+
+const appVersion = useAppVersion();
 
 function visit(url: string): void {
     emit('navigating');
@@ -26,7 +29,7 @@ function logout(): void {
 <template>
     <header id="top-bar">
         <div id="logo-container">
-            <span class="version">v.0.1</span>
+            <span class="version">v.{{ appVersion }}</span>
         </div>
 
         <nav id="top-nav">
