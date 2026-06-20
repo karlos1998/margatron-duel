@@ -45,7 +45,7 @@
   background: url("/game-assets/welcome.jpg");
 }
 
-section {
+#centerbox section {
   padding: 15px;
   min-width: 250px;
 }
@@ -104,7 +104,7 @@ section {
   color: white;
 }
 
-label {
+#centerbox label {
   width: 130px;
   text-align: right;
   float: left;
@@ -112,7 +112,7 @@ label {
   color: #ccc;
 }
 
-input {
+#centerbox input {
   width: 150px;
   padding: 3px 8px;
   border-radius: 5px;
@@ -121,37 +121,38 @@ input {
   color: #fff;
 }
 
-input:focus {
+#centerbox input:focus {
   outline: none;
   border-color: #c9a227;
 }
 
-input.good {
+#centerbox input.good {
   border-color: #5a5;
   background: #1a2a1a;
 }
 
-button {
+#centerbox button {
   border-radius: 5px;
   border: 1px solid gold;
   background: black;
   color: gold;
+  font-family: 'Cinzel', serif;
   padding: 2px 10px;
   cursor: pointer;
   margin-top: 10px;
 }
 
-button:hover:not(:disabled) {
+#centerbox button:hover:not(:disabled) {
   background: linear-gradient(to bottom, #5a5a4a, #3a3a30);
   border-color: #c9a227;
 }
 
-button:disabled {
+#centerbox button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-small {
+#centerbox small {
   display: block;
   margin-top: 15px;
   color: #888;
@@ -160,7 +161,7 @@ small {
   font-size: 11px;
 }
 
-small:hover {
+#centerbox small:hover {
   color: #c9a227;
 }
 
@@ -221,7 +222,7 @@ small:hover {
   margin: 5px;
 }
 
-footer {
+#centerbox footer {
   position: absolute;
   left: 0;
   top: 556px;
@@ -234,7 +235,7 @@ footer {
   color: #ffd;
 }
 
-footer a {
+#centerbox footer a {
   color: #ffd;
   text-decoration: none;
 }

@@ -16,6 +16,9 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home');
 
+Route::get('/login', fn () => redirect()->route('home'));
+Route::get('/register', fn () => redirect()->route('home'));
+
 Route::middleware('guest')->group(function (): void {
     Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');

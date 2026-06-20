@@ -39,6 +39,12 @@ final class GameFlowTest extends TestCase
         $this->get('/game')->assertRedirect('/login');
     }
 
+    public function test_guest_auth_entrypoints_return_home_screen(): void
+    {
+        $this->get('/login')->assertRedirect(route('home'));
+        $this->get('/register')->assertRedirect(route('home'));
+    }
+
     public function test_authenticated_game_screen_returns_snapshot(): void
     {
         $user = User::factory()->create();
