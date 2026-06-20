@@ -710,10 +710,8 @@
   height: 100%;
   position: relative;
   padding: 8px 10px 10px;
-  background-image:
-    radial-gradient(circle at 45% 40%, rgba(255, 207, 98, 0.18), rgba(30, 14, 2, 0.72) 55%, rgba(0, 0, 0, 0.86)),
-    url('/game-assets/mainback.jpg');
-  background-size: 1200px auto;
+  background-image: url('/game-assets/achievements-bg.png');
+  background-size: cover;
   background-position: center;
   color: #fff;
   overflow: hidden;
