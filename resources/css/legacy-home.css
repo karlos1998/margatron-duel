@@ -104,15 +104,26 @@
   color: white;
 }
 
+#centerbox .form-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+}
+
 #centerbox label {
+  display: block;
+  flex: 0 0 130px;
   width: 130px;
   text-align: right;
-  float: left;
+  float: none;
   cursor: default;
   color: #ccc;
 }
 
 #centerbox input {
+  display: block;
+  flex: 0 0 150px;
   width: 150px;
   padding: 3px 8px;
   border-radius: 5px;

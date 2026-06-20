@@ -87,17 +87,25 @@ function recoverPassword(): void {
         <div id="content">
             <div id="welcome">
                 <section id="signup">
-                    <label>Nick:</label>
-                    <input v-model="registerForm.nick" maxlength="20" :class="{ good: nickValid }">
+                    <div class="form-row">
+                        <label>Nick:</label>
+                        <input v-model="registerForm.nick" maxlength="20" :class="{ good: nickValid }">
+                    </div>
 
-                    <label>Email:</label>
-                    <input v-model="registerForm.email" maxlength="40" :class="{ good: emailValid }">
+                    <div class="form-row">
+                        <label>Email:</label>
+                        <input v-model="registerForm.email" maxlength="40" :class="{ good: emailValid }">
+                    </div>
 
-                    <label>Hasło:</label>
-                    <input v-model="registerForm.password" type="password" maxlength="20" :class="{ good: passValid }">
+                    <div class="form-row">
+                        <label>Hasło:</label>
+                        <input v-model="registerForm.password" type="password" maxlength="20" :class="{ good: passValid }">
+                    </div>
 
-                    <label>Potwierdź hasło:</label>
-                    <input v-model="registerForm.password_confirmation" type="password" maxlength="20" :class="{ good: pass2Valid }">
+                    <div class="form-row">
+                        <label>Potwierdź hasło:</label>
+                        <input v-model="registerForm.password_confirmation" type="password" maxlength="20" :class="{ good: pass2Valid }">
+                    </div>
 
                     <button :disabled="isLoading" @click="register">
                         {{ registerForm.processing ? 'Rejestracja...' : 'Załóż konto' }}
@@ -105,17 +113,21 @@ function recoverPassword(): void {
                 </section>
 
                 <section id="login">
-                    <label>Email:</label>
-                    <input v-model="loginForm.email" maxlength="40" :class="{ good: lemailValid }">
+                    <div class="form-row">
+                        <label>Email:</label>
+                        <input v-model="loginForm.email" maxlength="40" :class="{ good: lemailValid }">
+                    </div>
 
-                    <label>Hasło:</label>
-                    <input
-                        v-model="loginForm.password"
-                        type="password"
-                        maxlength="20"
-                        :class="{ good: lpassValid }"
-                        @keyup.enter="login"
-                    >
+                    <div class="form-row">
+                        <label>Hasło:</label>
+                        <input
+                            v-model="loginForm.password"
+                            type="password"
+                            maxlength="20"
+                            :class="{ good: lpassValid }"
+                            @keyup.enter="login"
+                        >
+                    </div>
 
                     <button :disabled="isLoading" @click="login">
                         {{ loginForm.processing ? 'Logowanie...' : 'Logowanie' }}
