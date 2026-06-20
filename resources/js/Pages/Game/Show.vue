@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { Head, router } from '@inertiajs/vue3';
+import GameTopBar from '@/Components/Game/GameTopBar.vue';
+import PlayerSidebar from '@/Components/Game/PlayerSidebar.vue';
+import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { echo } from '@/echo';
 import type { AxiosError } from 'axios';
-import type { ActionPointsChangedEvent, ActionPointState, BattleResult, GameSnapshot, Item, Location, Stage } from '@/types/game';
+import type { ActionPointsChangedEvent, ActionPointState, BattleResult, EquipmentSlot, GameSnapshot, Item, Location, PlayerAttributeKey, Stage } from '@/types/game';
 
 type Resource<T> = T | { data: T };
 type GameView = 'map' | 'battleSelection' | 'arena' | 'battle' | 'shop' | 'rest' | 'worldMap';
@@ -29,7 +31,6 @@ const tooltipItem = ref<Item | null>(null);
 const tooltipX = ref(0);
 const tooltipY = ref(0);
 const logScroll = ref<HTMLElement | null>(null);
-const equipmentSlots = ['weapon', 'armor', 'accessory'] as const;
 const actionPointFlash = ref(false);
 let actionPointRefreshTimer: number | undefined;
 let actionPointFlashTimer: number | undefined;
@@ -45,7 +46,6 @@ const inventoryFiltered = computed(() => inventory.value.filter(Boolean) as Item
 const currentShop = computed(() => currentShopId.value ? game.value.shops[currentShopId.value] : null);
 const shopName = computed(() => currentShop.value?.name ?? '');
 const shopItems = computed(() => currentShop.value?.items ?? []);
-const expPercent = computed(() => user.value.expMax > 0 ? (user.value.exp / user.value.expMax) * 100 : 0);
 const battleStages = computed(() => selectedBattleLocation.value?.stages?.map((stage) => ({
     ...stage,
     id: stage.stage,
@@ -383,7 +383,7 @@ async function useItem(index: number): Promise<void> {
     await action('/game/actions/inventory/equip', { index });
 }
 
-async function unequip(slot: 'weapon' | 'armor' | 'accessory'): Promise<void> {
+async function unequip(slot: EquipmentSlot): Promise<void> {
     if (!equipped.value[slot]) {
         return;
     }
@@ -401,7 +401,7 @@ async function instantRest(): Promise<void> {
     currentView.value = 'map';
 }
 
-async function addAttribute(attribute: 'vitality' | 'strength' | 'luck'): Promise<void> {
+async function addAttribute(attribute: PlayerAttributeKey): Promise<void> {
     if (user.value.attributePoints <= 0) {
         return;
     }
@@ -422,11 +422,6 @@ function showItemInfo(item: Item | null | undefined): void {
 
 function showItemMenu(index: number): void {
     void sellItem(index);
-}
-
-function logout(): void {
-    clearActionPointRefresh();
-    router.post('/logout');
 }
 
 function disposeGameView(): void {
@@ -466,107 +461,20 @@ async function scrollLog(): Promise<void> {
     <Head title="Gra" />
 
     <div id="game-container">
-        <header id="top-bar">
-            <div id="logo-container">
-                <span class="version">v.0.1</span>
-            </div>
-
-            <nav id="top-nav">
-                <button class="nav-btn">FORUM</button>
-                <button class="nav-btn">RANKINGI</button>
-                <button class="nav-btn">OSIĄGNIĘCIA</button>
-                <button class="nav-btn" @click="showSettings = true">KONFIGURACJA</button>
-                <button class="nav-btn logout" @click="logout">WYLOGUJ</button>
-            </nav>
-        </header>
+        <GameTopBar active="game" @settings="showSettings = true" @navigating="disposeGameView" />
 
         <div id="main-content">
-            <aside id="left-panel">
-                <div class="panel-section level-section">
-                    <div class="section-label">POZIOM: <span class="white-val">{{ user.level }}</span></div>
-                    <div class="exp-bar-container" :title="`EXP: ${user.exp} / ${user.expMax}`">
-                        <div class="exp-fill" :style="{ width: expPercent + '%' }"></div>
-                    </div>
-                </div>
-
-                <div class="panel-section resources-section">
-                    <div class="res-row">
-                        <span class="label">ZŁOTO:</span>
-                        <span class="val gold">{{ formatNumber(user.gold) }}</span>
-                    </div>
-                    <div class="res-row action-points-row" :class="{ 'pa-flash': actionPointFlash }">
-                        <span class="label">PUNKTY AKCJI:</span>
-                        <span class="val">{{ user.pa }}</span>
-                    </div>
-                    <button class="btn-more-pa" @click="showPAShop = true">WIĘCEJ PA</button>
-                </div>
-
-                <div class="panel-section attributes-section">
-                    <div class="attr-row">
-                        <span class="label">WITALNOŚĆ:</span>
-                        <span class="val">{{ user.vitality }}</span>
-                        <button v-if="user.attributePoints > 0" class="btn-plus-small" @click="addAttribute('vitality')">+</button>
-                    </div>
-                    <div class="attr-row">
-                        <span class="label">SIŁA:</span>
-                        <span class="val">{{ user.strength }}</span>
-                        <button v-if="user.attributePoints > 0" class="btn-plus-small" @click="addAttribute('strength')">+</button>
-                    </div>
-                    <div class="attr-row">
-                        <span class="label">SZCZĘŚCIE:</span>
-                        <span class="val">{{ user.luck }}</span>
-                        <button v-if="user.attributePoints > 0" class="btn-plus-small" @click="addAttribute('luck')">+</button>
-                    </div>
-                </div>
-
-                <div class="panel-section stats-section">
-                    <div class="section-header">STATYSTYKI</div>
-                    <div class="stat-row"><span class="label">Obrażenia:</span><span class="val">{{ user.dmgMin }}-{{ user.dmgMax }}</span></div>
-                    <div class="stat-row"><span class="label">Punkty życia:</span><span class="val hp">{{ user.hp }}</span></div>
-                    <div class="stat-row"><span class="label">Pancerz:</span><span class="val">{{ user.armor }}</span></div>
-                    <div class="stat-row"><span class="label">Cios kryt.:</span><span class="val">{{ user.critChance }}%</span></div>
-                    <div class="stat-row"><span class="label">Moc krytyka:</span><span class="val">{{ user.critPower }}%</span></div>
-                    <div class="stat-row"><span class="label">Unik:</span><span class="val">{{ user.dodge }}%</span></div>
-                    <div class="stat-row"><span class="label">Ogłuszenie:</span><span class="val">{{ user.stun }}%</span></div>
-                </div>
-
-                <div class="panel-section equipment-section">
-                    <div class="equip-grid">
-                        <div
-                            v-for="slot in equipmentSlots"
-                            :key="slot"
-                            class="eq-slot"
-                            :class="equipped[slot]?.rarityCss"
-                            @click="unequip(slot)"
-                            @mouseenter="showTooltip(equipped[slot], $event)"
-                            @mouseleave="hideTooltip"
-                        >
-                            <img v-if="equipped[slot]" :src="getItemImage(equipped[slot])" :alt="equipped[slot]?.name" class="item-image">
-                            <span v-else class="slot-bg"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-section inventory-section">
-                    <div class="inv-grid-classic">
-                        <div
-                            v-for="i in 15"
-                            :key="i"
-                            class="inv-cell"
-                            :class="inventory[i - 1]?.rarityCss"
-                            @click="useItem(i - 1)"
-                            @contextmenu.prevent="showItemMenu(i - 1)"
-                            @mouseenter="showTooltip(inventory[i - 1], $event)"
-                            @mouseleave="hideTooltip"
-                        >
-                            <img v-if="inventory[i - 1]" :src="getItemImage(inventory[i - 1])" :alt="inventory[i - 1]?.name" class="item-image">
-                            <span v-if="(inventory[i - 1]?.quantity ?? 1) > 1" class="qty">{{ inventory[i - 1]?.quantity }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="btn-chat-classic">CHAT</button>
-            </aside>
+            <PlayerSidebar
+                :user="user"
+                :action-point-flash="actionPointFlash"
+                @open-pa-shop="showPAShop = true"
+                @add-attribute="addAttribute"
+                @unequip="unequip"
+                @use-inventory-item="useItem"
+                @sell-inventory-item="showItemMenu"
+                @show-tooltip="showTooltip"
+                @hide-tooltip="hideTooltip"
+            />
 
             <main id="map-area">
                 <div v-if="currentView === 'map'" class="view-map">

@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Game\GameActionController;
 use App\Http\Controllers\Game\GameController;
+use App\Http\Controllers\Game\RankingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function (): void {
 
     Route::get('/game', [GameController::class, 'show'])->name('game.show');
     Route::get('/game/state', [GameController::class, 'state'])->name('game.state');
+    Route::get('/rankings', [RankingController::class, 'index'])->name('rankings.index');
 
     Route::prefix('/game/actions')->name('game.actions.')->group(function (): void {
         Route::post('/battle/stage', [GameActionController::class, 'stageBattle'])->name('battle.stage');

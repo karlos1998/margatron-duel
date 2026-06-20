@@ -65,6 +65,14 @@
   text-transform: uppercase;
 }
 
+.nav-btn:disabled {
+  cursor: default;
+}
+
+.nav-btn.active {
+  filter: brightness(1.15);
+}
+
 #main-content {
   display: flex;
   flex: 1;
@@ -167,6 +175,11 @@
   font-size: 0.7rem;
   cursor: pointer;
   font-family: 'Cinzel', serif;
+}
+
+.btn-more-pa:disabled {
+  cursor: default;
+  opacity: 0.9;
 }
 
 .attributes-section {
@@ -302,6 +315,15 @@
   cursor: pointer;
   border-radius: 10px;
   align-self: center;
+}
+
+#left-panel.read-only .eq-slot,
+#left-panel.read-only .inv-cell {
+  cursor: default;
+}
+
+#left-panel.read-only .btn-chat-classic {
+  cursor: default;
 }
 
 /* ================= MAP AREA ================= */
@@ -476,6 +498,210 @@
   background: #4a4a4a;
   color: #fff;
   border-color: #888;
+}
+
+/* ================= RANKINGS ================= */
+.rankings-view {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 15px 16px;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.1)),
+    url('/game-assets/welcome.jpg');
+  background-size: cover;
+  background-position: center;
+  color: #eee;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.ranking-board {
+  width: 500px;
+  position: relative;
+  z-index: 2;
+}
+
+.ranking-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 0 0 4px 8px;
+}
+
+.ranking-tab {
+  width: 86px;
+  height: 23px;
+  padding: 0;
+  border: 1px solid #b88f19;
+  border-radius: 4px;
+  background: linear-gradient(to bottom, #fff, #d9d9d9);
+  color: #2d2540;
+  font-size: 0.88rem;
+  line-height: 21px;
+  text-align: center;
+  text-shadow: none;
+  cursor: default;
+}
+
+.ranking-tab.active {
+  background: linear-gradient(to bottom, #ffcb37, #f08c00);
+  color: #5b3100;
+  border-color: #f4b62b;
+  font-weight: bold;
+}
+
+.ranking-tab:disabled {
+  opacity: 1;
+}
+
+.ranking-table {
+  width: 500px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: #eee;
+  font-size: 0.83rem;
+  text-shadow: 1px 1px 1px #000;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.ranking-table th,
+.ranking-table td {
+  height: 22px;
+  padding: 1px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ranking-table th {
+  color: #ffe64c;
+  background: linear-gradient(to bottom, rgba(80, 80, 80, 0.88), rgba(35, 35, 35, 0.9));
+  font-weight: bold;
+  text-align: left;
+}
+
+.ranking-table th:first-child,
+.ranking-table td:first-child {
+  width: 46px;
+  text-align: center;
+}
+
+.ranking-table th:nth-child(2),
+.ranking-table td:nth-child(2) {
+  width: 330px;
+}
+
+.ranking-table th:last-child,
+.ranking-table td:last-child {
+  width: 80px;
+  color: #ffe64c;
+  font-weight: bold;
+  text-align: center;
+}
+
+.ranking-table tbody tr:nth-child(odd) {
+  background: rgba(45, 45, 45, 0.72);
+}
+
+.ranking-table tbody tr:nth-child(even) {
+  background: rgba(91, 0, 0, 0.68);
+}
+
+.ranking-table tbody tr.current {
+  outline: 2px solid #ffe64c;
+  outline-offset: -2px;
+  background: rgba(92, 64, 0, 0.86);
+}
+
+.ranking-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  margin-top: 4px;
+  color: #fff;
+  font-size: 0.82rem;
+}
+
+.ranking-controls button,
+.ranking-close {
+  height: 22px;
+  padding: 0 10px;
+  border: 1px solid #f2cf3b;
+  border-radius: 5px;
+  background: linear-gradient(to bottom, #fff, #d8d8d8);
+  color: #3b2b28;
+  font-size: 0.82rem;
+  cursor: default;
+}
+
+.ranking-controls input {
+  width: 86px;
+  height: 20px;
+  margin-left: 4px;
+  border: 1px solid #111;
+  background: #fff;
+  color: #111;
+}
+
+.ranking-summary {
+  position: absolute;
+  top: 52px;
+  left: 610px;
+  width: 240px;
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+  z-index: 2;
+}
+
+.ranking-position-box {
+  width: 190px;
+  min-height: 73px;
+  padding: 10px 8px;
+  background: rgba(80, 80, 80, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  text-align: center;
+}
+
+.ranking-position-box span {
+  display: block;
+  font-weight: bold;
+  font-size: 0.82rem;
+}
+
+.ranking-position-box strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.ranking-summary p {
+  margin: 150px 0 0 -98px;
+  width: 310px;
+  color: #fff;
+  font-weight: bold;
+  line-height: 1.18;
+}
+
+.ranking-summary p + p {
+  margin-top: 6px;
+  color: #fceea7;
+}
+
+.ranking-close {
+  position: absolute;
+  right: 64px;
+  bottom: 32px;
+  width: 250px;
+  height: 32px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ranking-close:hover {
+  background: linear-gradient(to bottom, #fff8c5, #e5c24a);
 }
 
 /* ================= BATTLE SELECTION ================= */

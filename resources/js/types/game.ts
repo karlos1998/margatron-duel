@@ -62,6 +62,9 @@ export type Player = {
     };
 };
 
+export type EquipmentSlot = keyof Player['equipped'];
+export type PlayerAttributeKey = 'vitality' | 'strength' | 'luck';
+
 export type ActionPointState = Pick<Player, 'pa' | 'paMax' | 'paLimit' | 'paRegenerationLimit' | 'paRegenerationSeconds' | 'paRegeneratesAt'>;
 
 export type ActionPointsChangedEvent = {
@@ -131,6 +134,21 @@ export type GameSnapshot = {
     currentMap: GameMap;
     worldMaps: WorldMap[];
     shops: Record<string, Shop>;
+};
+
+export type RankingEntry = {
+    position: number;
+    profileId: number;
+    userId: number;
+    nick: string;
+    level: number;
+    currentUser: boolean;
+};
+
+export type PlayerRanking = {
+    entries: RankingEntry[];
+    currentPosition: number;
+    activeSort: 'level';
 };
 
 export type BattleLog = {
