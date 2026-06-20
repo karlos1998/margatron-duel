@@ -5,6 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        @if (config('app.force_https'))
+            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        @endif
+
         @vite('resources/js/app.ts')
         @inertiaHead
     </head>
