@@ -1,58 +1,205 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Margonem: Duel
+
+Przeglądarkowy RPG-duel inspirowany klasycznym frontendowym prototypem. Ta wersja jest przepisana na Laravel, Vue, Inertia i TypeScript, z normalnym backendem, autoryzacją, bazą danych, kolejkami oraz realtime przez Reverb.
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="docs/screenshots/home.jpg" alt="Ekran rejestracji i logowania" width="820">
 </p>
 
-## About Laravel
+<p align="center">
+  <img src="docs/screenshots/game.jpg" alt="Widok gry" width="820">
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 8.4, Laravel 13, Laravel Sail
+- Vue 3, Inertia, TypeScript, Vite
+- MySQL 8.4, Redis, Horizon
+- Laravel Reverb i Echo do realtime odświeżania punktów akcji
+- Docker Compose dla developmentu i osobny production compose dla deploya
+- GitHub Actions deployujące obraz na serwer
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Wymagania
 
-## Learning Laravel
+- Docker z Compose
+- PHP 8.4 i Composer lokalnie, tylko do pierwszego `composer install`
+- Node.js 20+, jeśli chcesz odpalać frontend poza Sailem
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Najwygodniej pracować przez Sail, wtedy PHP, MySQL, Redis, Horizon i Reverb siedzą w kontenerach.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalacja Lokalna
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+W `.env` ustaw wartości pod Saila:
 
-## Contributing
+```dotenv
+APP_NAME="Margonem: Duel"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8123
+APP_PORT=8123
+VITE_PORT=5173
+APP_FORCE_HTTPS=false
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
 
-## Code of Conduct
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+BROADCAST_CONNECTION=reverb
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+REDIS_CLIENT=phpredis
+REDIS_HOST=redis
+REDIS_PASSWORD=null
+REDIS_PORT=6379
 
-## Security Vulnerabilities
+REVERB_APP_ID=mgduel-local
+REVERB_APP_KEY=mgduel-local-key
+REVERB_APP_SECRET=mgduel-local-secret
+REVERB_HOST=reverb
+REVERB_PORT=8080
+REVERB_SCHEME=http
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+VITE_REVERB_APP_KEY="${REVERB_APP_KEY}"
+VITE_REVERB_HOST=localhost
+VITE_REVERB_PORT="${REVERB_PORT}"
+VITE_REVERB_SCHEME="${REVERB_SCHEME}"
 
-## License
+GAME_ACTION_POINT_REGENERATION_SECONDS=60
+GAME_ACTION_POINT_REGENERATION_LIMIT=20
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Uruchom środowisko:
+
+```bash
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate
+./vendor/bin/sail npm install
+./vendor/bin/sail npm run dev
+```
+
+Aplikacja będzie dostępna pod:
+
+- gra: `http://localhost:8123`
+- Vite: `http://localhost:5173`
+- Reverb: `ws://localhost:8080`
+- Mailpit: `http://localhost:8025`
+
+## Codzienna Praca
+
+```bash
+./vendor/bin/sail up -d
+./vendor/bin/sail npm run dev
+```
+
+Przy zmianach w backendzie zwykle wystarczy odświeżyć stronę. Przy zmianach w kolejkach lub eventach warto zrestartować workery:
+
+```bash
+./vendor/bin/sail artisan horizon:terminate
+./vendor/bin/sail up -d horizon
+```
+
+Horizon działa jako osobny serwis w `compose.yaml`, dzięki czemu nie trzeba mieszać procesu workera z webserverem.
+
+## Punkty Akcji I Realtime
+
+Punkty akcji odnawiają się przez joby kolejki:
+
+- `GAME_ACTION_POINT_REGENERATION_SECONDS=60` określa co ile sekund wpada 1 PA
+- `GAME_ACTION_POINT_REGENERATION_LIMIT=20` określa limit automatycznej regeneracji
+- bonusy, level-upy i mikstury mogą podnieść PA ponad limit
+- gdy gracz jest ponad limitem, automatyczna regeneracja po prostu przestaje dobijać kolejne punkty
+
+Zmiany PA są broadcastowane przez Reverb, więc widok gracza aktualizuje się bez ręcznego odświeżania.
+
+## Testy I Jakość
+
+```bash
+./vendor/bin/sail artisan test
+./vendor/bin/sail npm run type-check
+./vendor/bin/sail npm run build
+./vendor/bin/sail pint
+```
+
+Przed deployem minimum to testy PHP, type-check TypeScriptu i produkcyjny build Vite.
+
+## Produkcja
+
+Deploy produkcyjny jest w `.github/workflows/deploy-production.yml`. Push do `main`:
+
+1. pobiera `.env` z Envly,
+2. buduje obraz Docker,
+3. wysyła artefakty na serwer,
+4. uruchamia `docker compose -f docker-compose.production.yml`,
+5. odpala migracje,
+6. restartuje aplikację, Reverb, Horizon worker, scheduler i phpMyAdmin.
+
+Wymagane sekrety GitHub Actions:
+
+```text
+ENVLY_TOKEN
+SERVER_HOST
+SERVER_USER
+SERVER_SSH_KEY
+```
+
+Domyślny production target na serwerze:
+
+```text
+/opt/apps/mgduel
+```
+
+Na produkcji za Cloudflare ustaw:
+
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+APP_FORCE_HTTPS=true
+APP_URL=https://twoja-domena.pl
+VIRTUAL_HOST=twoja-domena.pl
+```
+
+`APP_FORCE_HTTPS=true` dodaje do głównego Blade meta tag `upgrade-insecure-requests`, co rozwiązuje typowe problemy Inertia/Axios z mixed content za Cloudflare.
+
+## Ważne Pliki
+
+- `app/Game/Services` - logika domenowa gry
+- `app/Game/Repositories` - katalog statycznych danych gry
+- `app/Game/Enums` i `app/Game/Attributes` - mapy, lokacje, rzadkości itemów i metadane
+- `app/Http/Requests` - walidacja akcji gracza
+- `app/Http/Resources` - kontrakt danych wysyłanych do Vue
+- `resources/js/Pages` - ekrany Inertia/Vue
+- `resources/css/legacy-*.css` - warstwa wizualna odtwarzająca stary frontend
+- `docker-compose.production.yml` - produkcyjny runtime
+
+## Przydatne Komendy
+
+```bash
+# logi aplikacji
+./vendor/bin/sail logs -f laravel.test
+
+# logi Horizon
+./vendor/bin/sail logs -f horizon
+
+# logi Reverb
+./vendor/bin/sail logs -f reverb
+
+# świeże migracje lokalnie
+./vendor/bin/sail artisan migrate:fresh
+
+# czyszczenie cache configu i widoków
+./vendor/bin/sail artisan optimize:clear
+```
+
+## Screenshoty
+
+Aktualne screenshoty do README są w `docs/screenshots`. Po większych zmianach UI warto je odświeżyć, żeby README pokazywał realny stan aplikacji.
